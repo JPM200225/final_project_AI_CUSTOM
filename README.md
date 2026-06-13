@@ -1,4 +1,5 @@
-﻿# Proyecto Examen Final - Modulo 3 - Integracion CAG
+@'
+# Proyecto Examen Final - Modulo 3 - Integracion CAG - Jose Medina
 
 Proyecto base extendido con un modulo de **CAG (Context-Augmented Generation)**
 que permite guardar, recuperar y usar contexto persistente del usuario para
@@ -54,28 +55,66 @@ Abra `frontend/index.html` en un navegador.
 - `POST /api/context` - `{ "user_id": "...", "key": "...", "value": "..." }` -> guarda contexto.
 - `GET /api/context?user_id=...` - lista el contexto guardado del usuario.
 
+## Ejemplo de uso del CAG
+
+1. Guardar contexto del usuario:
+```bash
+curl -X POST http://127.0.0.1:8000/api/context \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "ana", "key": "audience", "value": "explicar como principiante"}'
+```
+
+2. Preguntar algo (la respuesta usara ese contexto):
+```bash
+curl -X POST http://127.0.0.1:8000/api/ask \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "ana", "question": "Que es CAG?"}'
+```
+
+La respuesta incluira una explicacion adaptada para principiantes y el campo
+`context_used` mostrara `["audience"]`.
+
 ## Metodologia Scrum
 
 El desarrollo se organizo en 2 sprints, documentados en `docs/scrum/`:
 
-- **Sprint 1**: implementacion del modulo CAG (ContextStore, apply_context, integracion en assistant.py) y pruebas propias.
+- **Sprint 1**: implementacion del modulo CAG (ContextStore, apply_context, integracion en assistant.py), pruebas propias y backlog.
 - **Sprint 2**: escenarios BDD, documentacion final, evidencias y validacion final.
 
 Ver `docs/scrum/backlog.md`, `docs/scrum/sprint1.md` y `docs/scrum/sprint2.md`.
 
 ## BDD
 
-Escenarios de comportamiento del modulo CAG en `docs/bdd/cag.feature`.
+Escenarios de comportamiento del modulo CAG en `docs/bdd/cag.feature`
+(cubre guardar contexto, recuperarlo, usuario sin contexto, uso del contexto
+en una respuesta, y preguntas sin contexto previo).
 
 ## Explicacion tecnica
 
-Ver `docs/explicacion-tecnica.md`.
+Ver `docs/explicacion-tecnica.md` para el detalle de los componentes,
+decisiones de diseno y como se complementan RAG y CAG.
 
 ## Evidencias
 
-Ver `docs/evidencias/` para capturas de pruebas, funcionamiento y proceso Scrum.
+Ver `docs/evidencias/` para capturas de pruebas, funcionamiento del frontend,
+Pull Request, merge y planificacion Scrum.
+
+## Pull Request
+
+El modulo CAG se desarrollo en la rama `feature/cag-integration` y se
+integro a `main` mediante un Pull Request revisado y mergeado dentro de
+este fork: ver historial de Pull Requests del repositorio.
 
 ## Registro de uso de IA
 
-Ver `PROMPTS.md` para el registro cronologico de prompts usados, decisiones
-humanas y verificaciones aplicadas.
+Ver `PROMPTS.md` para el registro cronologico completo de prompts usados,
+resumenes de respuestas, decisiones humanas y verificaciones aplicadas
+durante todo el desarrollo.
+
+## Resultados de pruebas
+
+- Pruebas base: 3/3 OK
+- Pruebas de contrato CAG: 3/3 OK
+- Pruebas propias: 4/4 OK
+- Total: 10/10 OK
+'@ | Set-Content -Encoding UTF8 README.md
